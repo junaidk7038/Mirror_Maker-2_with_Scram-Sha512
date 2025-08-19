@@ -10,7 +10,7 @@ spec:
 
   clusters:
     - alias: "source"
-      bootstrapServers: 20.255.219.71:9092
+      bootstrapServers: "EXTERNAL-IP":9092
       authentication:
         type: scram-sha-512
         username: my-user
