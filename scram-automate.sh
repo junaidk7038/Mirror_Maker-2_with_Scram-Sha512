@@ -5,7 +5,7 @@ set -Eeuo pipefail
 TGT_NS="${TGT_NS:-kafka}"
 SECRET_NAME="${SECRET_NAME:-my-user}"           # name of secret on TARGET holding the password
 KAFKA_USER="${KAFKA_USER:-my-user}"             # SASL/SCRAM username on SOURCE
-SOURCE_BOOTSTRAP="${SOURCE_BOOTSTRAP:-20.255.219.71:9092}"  # Azure external 9092
+SOURCE_BOOTSTRAP="${SOURCE_BOOTSTRAP:-External-IP:9092}"  # Azure external 9092
 MM2_FILE="${MM2_FILE:-scram-final-mm2.yaml}"
 
 # Default password (from your source cluster)
