@@ -1,0 +1,50 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaMirrorMaker2
+metadata:
+  name: my-mm2
+  namespace: kafka
+spec:
+  version: 4.0.0
+  replicas: 1
+  connectCluster: "target"
+
+  clusters:
+    - alias: "source"
+      bootstrapServers: 20.255.219.71:9092
+      authentication:
+        type: scram-sha-512
+        username: my-user
+        passwordSecret:
+          secretName: my-user
+          password: password
+
+    - alias: "target"
+      bootstrapServers: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+
+  mirrors:
+    - sourceCluster: "source"
+      targetCluster: "target"
+      topicsPattern: ".*"
+      groupsPattern: ".*"
+
+      # MirrorSourceConnector options
+      sourceConnector:
+        config:
+          replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"
+          replication.factor: 1
+          emit.heartbeats.enabled: true
+          sync.group.offsets.enabled: true
+          sync.topic.configs.enabled: true
+          refresh.topics.interval.seconds: 30
+          refresh.groups.interval.seconds: 30
+
+      # Heartbeats connector options
+      heartbeatConnector:
+        config:
+          heartbeats.topic.replication.factor: 1
+
+      # Checkpoints connector options
+      checkpointConnector:
+        config:
+          replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"
+          checkpoints.topic.replication.factor: 1
